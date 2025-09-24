@@ -1,5 +1,5 @@
 # Dockerfile para Expo web no Dokploy
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build  # Atualizado para Node 20
 WORKDIR /app
 COPY package*.json ./
 RUN npm install -g @expo/cli  # Instala Expo globalmente
