@@ -1,12 +1,15 @@
-# Dockerfile para Expo web no Dokploy
-# Atualizado para Node 20
-FROM node:20-alpine AS build
+# Dockerfile para Expo web usando Node 20 (Debian) e npx
+FROM node:20-bullseye-slim AS build
 WORKDIR /app
+
+# copie apenas package antes para cache
 COPY package*.json ./
-RUN npm install -g @expo/cli
 RUN npm ci --include=dev
+
 COPY . .
-RUN npm run build
+
+# use npx para executar o expo bin diretamente (evita Permission denied)
+RUN npx expo export --platform web
 
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
