@@ -2,10 +2,9 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production=false  # Instala tudo, incluindo dev
+RUN npm install -g @expo/cli  # Instala Expo globalmente
+RUN npm ci --include=dev  # Instala dependências incluindo dev
 COPY . .
-# Adiciona permissões ao Expo e instala globalmente se necessário
-RUN chmod +x node_modules/.bin/expo || npm install -g @expo/cli
 RUN npm run build  # Executa "expo export --platform web" e gera dist
 
 FROM nginx:alpine
